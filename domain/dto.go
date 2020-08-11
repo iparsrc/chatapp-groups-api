@@ -11,6 +11,7 @@ type Group struct {
 	Admins          []string           `json:"admins" bson:"admins"`
 	Members         []string           `json:"members" bson:"members"`
 	Private         bool               `json:"private" bson:"private"`
+	DateCreated     int64              `json:"dateCreated" bson:"dateCreated"`
 	Description     string             `json:"description" bson:"description"`
 	GroupUniqueName string             `json:"groupUniqueName" bson:"groupUniqueName"`
 }
