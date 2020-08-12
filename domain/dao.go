@@ -52,3 +52,27 @@ func Delete(id string) *utils.RestErr {
 	}
 	return nil
 }
+
+func Update(id, name, description string, private bool) *utils.RestErr {
+	groupsC := db.Collection("groups")
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	update := bson.M{
+		"$set": bson.M{
+			"name":        name,
+			"private":     private,
+			"description": description,
+		},
+	}
+	res, err := groupsC.UpdateOne(ctx, bson.M{"_id": id}, update)
+	if err != nil {
+		return utils.InternalServerErr("can't operate update functionality.")
+	}
+	if res.MatchedCount == 0 {
+		return utils.NotFound("group not found.")
+	}
+	if res.ModifiedCount == 0 {
+		return utils.BadRequest("nothing to update, group is already up-to-date.")
+	}
+	return nil
+}
