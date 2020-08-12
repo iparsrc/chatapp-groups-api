@@ -76,3 +76,25 @@ func Update(id, name, description string, private bool) *utils.RestErr {
 	}
 	return nil
 }
+
+func AddAdmin(groupID, userID string) *utils.RestErr {
+	groupsC := db.Collection("groups")
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	update := bson.M{
+		"$addToSet": bson.M{
+			"admins": userID,
+		},
+	}
+	res, err := groupsC.UpdateOne(ctx, bson.M{"_id": groupID}, update)
+	if err != nil {
+		return utils.InternalServerErr("can't operate add admin functionality.")
+	}
+	if res.MatchedCount == 0 {
+		return utils.NotFound("group not found")
+	}
+	if res.ModifiedCount == 0 {
+		return utils.BadRequest("user is already an admin.")
+	}
+	return nil
+}
