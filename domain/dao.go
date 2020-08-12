@@ -108,7 +108,7 @@ func AddMember(groupID, userID string) *utils.RestErr {
 			"members": userID,
 		},
 	}
-	res, err := groupsC.UpdateOne(ctx, bson.M{"_id": id}, update)
+	res, err := groupsC.UpdateOne(ctx, bson.M{"_id": groupID}, update)
 	if err != nil {
 		return utils.InternalServerErr("can't operate add member functionality.")
 	}
