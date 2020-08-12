@@ -27,3 +27,14 @@ func Create(group *Group) (*Group, *utils.RestErr) {
 	}
 	return group, nil
 }
+
+func Retrive(id string) (*Group, *utils.RestErr) {
+	groupsC := db.Collection("groups")
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	var group Group
+	if err := groupsC.FindOne(ctx, bson.M{"_id": id}).Decode(&group); err != nil {
+		return nil, utils.NotFound("group not found.")
+	}
+	return &group, nil
+}
