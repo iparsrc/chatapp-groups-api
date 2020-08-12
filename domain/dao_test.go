@@ -7,7 +7,9 @@ import (
 )
 
 func TestCreate(t *testing.T) {
-	ConnectDB("mongodb://localhost:27017")
+	if db == nil {
+		ConnectDB("mongodb://localhost:27017")
+	}
 	groupOne := Group{
 		ID:          "A",
 		Name:        "LetsPair",
@@ -40,10 +42,30 @@ func TestCreate(t *testing.T) {
 }
 
 func TestRetrive(t *testing.T) {
-	ConnectDB("mongodb://localhost:27017")
+	if db == nil {
+		ConnectDB("mongodb://localhost:27017")
+	}
 	group, restErr := Retrive("A")
 	if restErr != nil {
 		t.Error(restErr.Message)
 	}
 	fmt.Println("    ", *group)
+}
+
+func TestDelete(t *testing.T) {
+	if db == nil {
+		ConnectDB("mongodb://localhost:27017")
+	}
+	restErr := Delete("A")
+	if restErr != nil {
+		t.Error(restErr.Message)
+	}
+	restErr = Delete("A")
+	if restErr == nil {
+		t.Error("Deleting a group that doesn't exists must not give a nil err.")
+	}
+	restErr = Delete("B")
+	if restErr != nil {
+		t.Error(restErr.Message)
+	}
 }
