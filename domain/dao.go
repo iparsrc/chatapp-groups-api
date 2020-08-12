@@ -38,3 +38,17 @@ func Retrive(id string) (*Group, *utils.RestErr) {
 	}
 	return &group, nil
 }
+
+func Delete(id string) *utils.RestErr {
+	groupsC := db.Collection("groups")
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	res, err := groupsC.DeleteOne(ctx, bson.M{"_id": id})
+	if err != nil {
+		return utils.InternalServerErr("can't operate delete functionality.")
+	}
+	if res.DeletedCount == 0 {
+		return utils.NotFound("group not found.")
+	}
+	return nil
+}
