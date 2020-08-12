@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
@@ -30,10 +31,19 @@ func TestCreate(t *testing.T) {
 	if restErr != nil {
 		t.Error(restErr.Message)
 	}
-	println("    ", group)
+	fmt.Println("    ", *group)
 	group, restErr = Create(&groupTwo)
 	if restErr != nil {
 		t.Error(restErr.Message)
 	}
-	println("    ", group)
+	fmt.Println("    ", *group)
+}
+
+func TestRetrive(t *testing.T) {
+	ConnectDB("mongodb://localhost:27017")
+	group, restErr := Retrive("A")
+	if restErr != nil {
+		t.Error(restErr.Message)
+	}
+	fmt.Println("    ", *group)
 }
