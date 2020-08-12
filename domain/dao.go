@@ -10,10 +10,10 @@ import (
 )
 
 func Create(group *Group) (*Group, *utils.RestErr) {
-	usersC := db.Collection("groups")
+	groupsC := db.Collection("groups")
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
-	result, err := usersC.InsertOne(ctx, bson.M{
+	result, err := groupsC.InsertOne(ctx, bson.M{
 		"name":            group.Name,
 		"owner":           group.Owner,
 		"admins":          group.Admins,
