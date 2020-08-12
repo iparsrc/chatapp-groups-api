@@ -120,3 +120,24 @@ func AddMember(groupID, userID string) *utils.RestErr {
 	}
 	return nil
 }
+func DelMember(groupID, userID string) *utils.RestErr {
+	groupsC := db.Collection("groups")
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	update := bson.M{
+		"$pull": bson.M{
+			"member": userID,
+		},
+	}
+	res, err := groupsC.UpdateOne(ctx, bson.M{"_id": groupID}, update)
+	if err != nil {
+		return utils.InternalServerErr("can't operate del memeber functionality.")
+	}
+	if res.MatchedCount == 0 {
+		return utils.NotFound("group not found.")
+	}
+	if res.ModifiedCount == 0 {
+		return utils.BadRequest("user is not a member.")
+	}
+	return nil
+}
