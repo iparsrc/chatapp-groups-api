@@ -51,12 +51,12 @@ func CheckForIndexes() {
 		if err := cur.Decode(&index); err != nil {
 			log.Fatal(nil)
 		}
-		if index["name"] == "groupname" {
+		if index["name"] == "groupUniqueName" {
 			return
 		}
 	}
 	// At this point we are sure that groupname is not an index in the collection.
-	CreateIndex("groupname", true)
+	CreateIndex("groupUniqueName", true)
 }
 
 func CreateIndex(name string, unique bool) {
@@ -77,6 +77,6 @@ func CreateIndex(name string, unique bool) {
 		log.Fatal(err)
 	}
 	if n != name {
-		log.Fatal("index name is not groupname.")
+		log.Fatal("index name is not groupUniqueName.")
 	}
 }
