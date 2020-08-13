@@ -52,7 +52,7 @@ func TestRetrive(t *testing.T) {
 	fmt.Println("    ", *group)
 }
 
-func TestUpdate(t *testing.T) {
+func TestUpdate(t *testing.T) { // Complete.
 	restErr := Update("A", "Python-Gang", "This is for python gangs.", false)
 	if restErr != nil {
 		t.Error(restErr.Message)
@@ -61,11 +61,6 @@ func TestUpdate(t *testing.T) {
 	if restErr == nil {
 		t.Error("up-to-date group must give a rest error not a nil rest error.")
 	}
-	group, restErr := Retrive("A")
-	if restErr != nil {
-		t.Error(restErr.Message)
-	}
-	fmt.Println("    ", *group)
 }
 
 func TestDelete(t *testing.T) { // Complete.
