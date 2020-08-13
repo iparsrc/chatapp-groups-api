@@ -53,6 +53,9 @@ func TestRetrive(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) { // Complete.
+	if db == nil {
+		ConnectDB("mongodb://localhost:27017")
+	}
 	restErr := Update("A", "Python-Gang", "This is for python gangs.", false)
 	if restErr != nil {
 		t.Error(restErr.Message)
