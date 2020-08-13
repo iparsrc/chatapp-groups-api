@@ -6,9 +6,13 @@ import (
 	"time"
 )
 
+const (
+	uri = "mongodb://localhost:27017"
+)
+
 func TestCreate(t *testing.T) {
 	if db == nil {
-		ConnectDB("mongodb://localhost:27017")
+		ConnectDB(uri)
 	}
 	groupOne := Group{
 		ID:          "A",
@@ -44,7 +48,7 @@ func TestCreate(t *testing.T) {
 
 func TestRetrive(t *testing.T) { // Complete.
 	if db == nil {
-		ConnectDB("mongodb://localhost:27017")
+		ConnectDB(uri)
 	}
 	// Try to retrive a group that exists.
 	group, restErr := Retrive("A")
@@ -67,7 +71,7 @@ func TestRetrive(t *testing.T) { // Complete.
 
 func TestUpdate(t *testing.T) { // Complete.
 	if db == nil {
-		ConnectDB("mongodb://localhost:27017")
+		ConnectDB(uri)
 	}
 	// Try to update a group that exists and is not up-to-date.
 	if restErr := Update("A", "Python-Gang", "This is for python gang.", false); restErr != nil {
@@ -85,7 +89,7 @@ func TestUpdate(t *testing.T) { // Complete.
 
 func TestAddAdmin(t *testing.T) { // Complete.
 	if db == nil {
-		ConnectDB("mongodb://localhost:27017")
+		ConnectDB(uri)
 	}
 	if restErr := AddAdmin("A", "1"); restErr != nil { // Try to add a new admin to the group.
 		t.Error(restErr.Message)
@@ -98,9 +102,27 @@ func TestAddAdmin(t *testing.T) { // Complete.
 	}
 }
 
+func TestAddMemeber(t *testing.T) { // Complete.
+	if db == nil {
+		ConnectDB(uri)
+	}
+	// Try to add a new member to a group that exists.
+	if restErr := AddMember("A", "3"); restErr != nil {
+		t.Error(restErr.Message)
+	}
+	// Try to add member that already is a member of the group.
+	if restErr := AddMember("A", "3"); restErr == nil {
+		t.Error("Adding member that is already a member, must not give a nil err.")
+	}
+	// Try to add member to a group that doesn't exist.
+	if restErr := AddMember("C", "5"); restErr == nil {
+		t.Error("Adding member to a group that doesn't exist, must not give a nil err.")
+	}
+}
+
 func TestDelete(t *testing.T) { // Complete.
 	if db == nil {
-		ConnectDB("mongodb://localhost:27017")
+		ConnectDB(uri)
 	}
 	if restErr := Delete("A"); restErr != nil { // Try to delete a group that exists.
 		t.Error(restErr.Message)
