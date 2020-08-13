@@ -126,7 +126,7 @@ func DelMember(groupID, userID string) *utils.RestErr {
 	defer cancel()
 	update := bson.M{
 		"$pull": bson.M{
-			"member": userID,
+			"members": userID,
 		},
 	}
 	res, err := groupsC.UpdateOne(ctx, bson.M{"_id": groupID}, update)
