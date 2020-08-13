@@ -91,13 +91,16 @@ func TestAddAdmin(t *testing.T) { // Complete.
 	if db == nil {
 		ConnectDB(uri)
 	}
-	if restErr := AddAdmin("A", "1"); restErr != nil { // Try to add a new admin to the group.
+	// Try to add a new admin to the group.
+	if restErr := AddAdmin("A", "1"); restErr != nil {
 		t.Error(restErr.Message)
 	}
-	if restErr := AddAdmin("A", "1"); restErr == nil { // Try to add an admin that is already an admin.
+	// Try to add an admin that is already an admin.
+	if restErr := AddAdmin("A", "1"); restErr == nil {
 		t.Error("Adding admin that already is an admin of the group, must not give a nil err.")
 	}
-	if restErr := AddAdmin("C", "1"); restErr == nil { // Try to add an admin to a group that doesn't exist.
+	// Try to add an admin to a group that doesn't exist.
+	if restErr := AddAdmin("C", "1"); restErr == nil {
 		t.Error("Adding admin to a group that doesn't exist, must not give a nil err.")
 	}
 }
@@ -120,17 +123,38 @@ func TestAddMemeber(t *testing.T) { // Complete.
 	}
 }
 
+func TestDelMember(t *testing.T) { // Complete.
+	if db == nil {
+		ConnectDB(uri)
+	}
+	// Try to delete a member that exists in a group that also exists.
+	if restErr := DelMember("A", "1"); restErr != nil {
+		t.Error(restErr.Message)
+	}
+	// Try to delete a member that doesn't exist in a group that exists.
+	if restErr := DelMember("A", "1"); restErr == nil {
+		t.Error("Deleting a memeber that doesn't exist in a group, must not give a nil err.")
+	}
+	// Try to delete a member from a group that doesn't exist.
+	if restErr := DelMember("C", "1"); restErr == nil {
+		t.Error("Deleting a member from a group that doesn't exist, must not give a nil err.")
+	}
+}
+
 func TestDelete(t *testing.T) { // Complete.
 	if db == nil {
 		ConnectDB(uri)
 	}
-	if restErr := Delete("A"); restErr != nil { // Try to delete a group that exists.
+	// Try to delete a group that exists.
+	if restErr := Delete("A"); restErr != nil {
 		t.Error(restErr.Message)
 	}
-	if restErr := Delete("A"); restErr == nil { // Try to delete a group that doesn't exist.
+	// Try to delete a group that doesn't exist.
+	if restErr := Delete("A"); restErr == nil {
 		t.Error("Deleting a group that doesn't exists, must not give a nil err.")
 	}
-	if restErr := Delete("B"); restErr != nil { // Try to delete a group that exist.
+	// Try to delete a group that exist.
+	if restErr := Delete("B"); restErr != nil {
 		t.Error(restErr.Message)
 	}
 }
